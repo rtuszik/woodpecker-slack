@@ -8,6 +8,7 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strings"
@@ -488,13 +489,27 @@ func message(repo Repo, build Build, config Config) string {
 	}
 	repoName = fmt.Sprintf("<https://github.com/%s/%s/|%s>", repo.Owner, repo.Name, repo.Name)
 
-	return fmt.Sprintf("%s: %s/%s • <%s|CI Pipeline>\n`%s` by %s",
-		status,
+	statusmsg := status
+	if status == "Failure" {
+		failMessages := []string{
+			"Better luck next time...",
+			"At least you tried!",
+			"You can do this!",
+			"Ah shit, here we go again.",
+			"Works on my machine",
+			"Mistakes were made",
+			"Have you considered a career in farming?",
+		}
+		statusmsg = failMessages[rand.Intn(len(failMessages))]
+	}
+
+	return fmt.Sprintf("%s - %s/%s • <%s|Build >\n`%s` by %s",
+		statusmsg,
 		repoName,
 		repoLink,
 		build.Link,
 		build.Message.Title,
-		build.Author,
+		build.Author.Username,
 	)
 }
 
