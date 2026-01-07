@@ -1,3 +1,5 @@
+# moved to github actions for build
+
 when:
   branch: master
 

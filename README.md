@@ -1,33 +1,33 @@
 # Woodpecker CI Slack Plugin
 
-Woodpecker plugin for sending Slack notifications cloned from: https://github.com/drone-plugins/drone-slack
+Forked for Docker Publish and GH-Action Build
 
 Use in `.woodpecker.yaml` as follows:
 
 ```yaml
-  slack-failure:
-    image: gowerstreet/slack:latest
+slack-failure:
+    image: rtuszik/woodpecker-slack:latest
     pull: true
     settings:
-      status: failure
-      description: <description of your service or system>
-      webhook:
-        from_secret: slack_webhook
+        status: failure
+        description: <description of your service or system>
+        webhook:
+            from_secret: slack_webhook
     when:
-      status: failure
+        status: failure
 
-  slack-release:
-    image: gowerstreet/slack:latest
+slack-release:
+    image: rtuszik/woodpecker-slack:latest
     pull: true
     settings:
-      status: success
-      description: <description of your service or system>
-      webhook:
-        from_secret: slack_webhook
+        status: success
+        description: <description of your service or system>
+        webhook:
+            from_secret: slack_webhook
     when:
-      event: push
-      branch: <main branch, usually master>
-      status: success
+        event: push
+        branch: <main branch, usually master>
+        status: success
 ```
 
 This ensures that a message is posted if a pull request or master commit fails and also that a message is posted if master succeeds and a new version is deployed.
