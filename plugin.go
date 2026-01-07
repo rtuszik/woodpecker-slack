@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	textTemplate "text/template"
 	"time"
 
@@ -31,22 +31,22 @@ type (
 	}
 
 	Build struct {
-		Tag         string
-		Event       string
-		Number      int
-		Parent      int
-		Commit      string
-		Ref         string
-		Branch      string
-		Author      Author
-		Pull        string
-		PullBranch  string
-		Message     Message
-		DeployTo    string
-		Status      string
-		Link        string
-		Started     int64
-		Created     int64
+		Tag        string
+		Event      string
+		Number     int
+		Parent     int
+		Commit     string
+		Ref        string
+		Branch     string
+		Author     Author
+		Pull       string
+		PullBranch string
+		Message    Message
+		DeployTo   string
+		Status     string
+		Link       string
+		Started    int64
+		Created    int64
 	}
 
 	Author struct {
@@ -90,7 +90,7 @@ type (
 		// Git path to get list of committer emails
 		CommitterListGitPath string
 		CommitterSlackId     bool
-        Description     string
+		Description          string
 	}
 
 	Job struct {
@@ -470,35 +470,30 @@ func templateMessage(t string, plugin Plugin) (string, error) {
 
 func message(repo Repo, build Build, config Config) string {
 	var repoLink string
-    var status string
-    var branch string
-    var repoName string
+	var status string
+	var branch string
+	var repoName string
 	if build.Pull != "" {
-        branch = build.PullBranch
-        repoLink = fmt.Sprintf("<https://github.com/%s/%s/pull/%s|%s>", repo.Owner, repo.Name, build.Pull, branch)
-        status = cases.Title(language.Und).String(build.Status)
+		branch = build.PullBranch
+		repoLink = fmt.Sprintf("<https://github.com/%s/%s/pull/%s|%s>", repo.Owner, repo.Name, build.Pull, branch)
+		status = cases.Title(language.Und).String(build.Status)
 	} else {
-        branch = fmt.Sprintf("*%s*", build.Branch)
-        repoLink = fmt.Sprintf("<https://github.com/%s/%s/tree/%s|%s>", repo.Owner, repo.Name, build.Branch, branch)
-        if build.Status == "Success" {
-            status = "Releasing"
-        } else {
-            status = cases.Title(language.Und).String(build.Status)
-        }
+		branch = fmt.Sprintf("*%s*", build.Branch)
+		repoLink = fmt.Sprintf("<https://github.com/%s/%s/tree/%s|%s>", repo.Owner, repo.Name, build.Branch, branch)
+		if build.Status == "Success" {
+			status = "Releasing"
+		} else {
+			status = cases.Title(language.Und).String(build.Status)
+		}
 	}
-    repoName = fmt.Sprintf("<https://github.com/%s/%s/|%s>", repo.Owner, repo.Name, repo.Name)
+	repoName = fmt.Sprintf("<https://github.com/%s/%s/|%s>", repo.Owner, repo.Name, repo.Name)
 
-	description := ""
-	if config.Description != "" {
-		description = fmt.Sprintf("%s • ", config.Description)
-	}
-
-    return fmt.Sprintf("%s: %s/%s • <%s|CI Pipeline>\n`%s` by %s",
-        status,
-        repoName,
-        repoLink,
+	return fmt.Sprintf("%s: %s/%s • <%s|CI Pipeline>\n`%s` by %s",
+		status,
+		repoName,
+		repoLink,
 		build.Link,
-        build.Message.Title,
+		build.Message.Title,
 		build.Author,
 	)
 }
