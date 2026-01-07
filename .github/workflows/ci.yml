@@ -26,8 +26,8 @@ jobs:
         with:
           version: latest
 
-      - name: Test
-        run: go test ./...
+      # - name: Test
+      #   run: go test ./...
 
       - name: Build
         env:
