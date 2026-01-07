@@ -493,14 +493,13 @@ func message(repo Repo, build Build, config Config) string {
 		description = fmt.Sprintf("%s • ", config.Description)
 	}
 
-    return fmt.Sprintf("%s: %s/%s • %s<%s|CI Pipeline>\n`%s` by %s",
+    return fmt.Sprintf("%s: %s/%s • <%s|CI Pipeline>\n`%s` by %s",
         status,
         repoName,
         repoLink,
-        description,
 		build.Link,
         build.Message.Title,
-		build.Author.Email,
+		build.Author,
 	)
 }
 
