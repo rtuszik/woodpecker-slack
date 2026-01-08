@@ -503,7 +503,7 @@ func message(repo Repo, build Build, config Config) string {
 		statusmsg = failMessages[rand.Intn(len(failMessages))]
 	}
 
-	return fmt.Sprintf("%s - %s/%s • <%s|Build >\n`%s` by %s",
+	return fmt.Sprintf("%s - %s/%s • <%s|Pipeline >\n`%s` by %s",
 		statusmsg,
 		repoName,
 		repoLink,
